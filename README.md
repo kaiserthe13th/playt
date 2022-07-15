@@ -7,8 +7,8 @@ read like plate, playt with fun
 ```rs
 // in examples/hello.rs
 
+use pancurses::Input;
 use playt::prelude::*;
-use pancurses::{Window, Input};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut game = Game::with_colors(())
@@ -17,10 +17,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut stage = Stage::new(())
         .clear_on_resize(true)
         .draw(|_, _, win| -> Result<(), ()> {
-            let greeting = "Hello, World!";
-            win.attron(color::GREEN_ON_BLACK);
-            win.mvprintw(win.get_mid_y(0), win.get_mid_x(greeting.len() as i32), greeting);
-            win.attroff(color::GREEN_ON_BLACK);
+            win.with_attr(color::GREEN_ON_BLACK, |win| {
+                let greeting = "Hello, World!";
+                win.mvprintw(win.get_mid_y(0), win.get_mid_x(greeting.len() as i32), greeting);
+            });
             Ok(())
         })
         .update(|game, _, input| {
