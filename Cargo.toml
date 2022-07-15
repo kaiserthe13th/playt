@@ -2,6 +2,11 @@
 name = "playt"
 version = "0.1.0"
 edition = "2021"
+description = "Playt is a game library for the terminal"
+readme = "README.md"
+license = "MIT"
+keywords = ["gamedev", "game", "terminal"]
+categories = ["game-development"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
