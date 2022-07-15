@@ -5,6 +5,7 @@ edition = "2021"
 description = "Playt is a game library for the terminal"
 readme = "README.md"
 license = "MIT"
+repository = "https://github.com/kaiserthe13th/playt"
 keywords = ["gamedev", "game", "terminal"]
 categories = ["game-development"]
 
