@@ -17,7 +17,8 @@ crate-type = ["lib"]
 
 [dependencies]
 pancurses = "0.17"
+unicode-segmentation = { version = "1.9.0", optional = true }
 
 [features]
 default = ["wide"]
-wide = ["pancurses/wide"]
+wide = ["pancurses/wide", "unicode-segmentation"]
