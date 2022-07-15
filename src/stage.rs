@@ -74,6 +74,9 @@ impl<T, E, G> Stage<T, E, G> {
     pub fn state_mut(&mut self) -> &mut T {
         &mut self.state
     }
+    pub fn state_consume(self) -> T {
+        self.state
+    }
     pub fn update(&mut self, game: &mut Game<G>) -> Result<(), E> {
         let i = game.win().getch();
         if self.clear_on_resize {
