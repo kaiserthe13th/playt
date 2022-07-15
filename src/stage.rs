@@ -11,6 +11,7 @@ pub struct StageBuilder<T, E, G> {
     update: UpdateFn<T, E, G>,
     draw: DrawFn<T, E, G>,
     clear_on_resize: bool,
+    nodelay: bool,
 }
 
 impl<T, E, G> StageBuilder<T, E, G> {
@@ -20,12 +21,20 @@ impl<T, E, G> StageBuilder<T, E, G> {
             update: |_, _, _| Ok(()),
             draw: |_, _, _| Ok(()),
             clear_on_resize: false,
+            nodelay: false,
         }
     }
 
     pub fn clear_on_resize(self, clear_on_resize: bool) -> Self {
         Self {
             clear_on_resize,
+            ..self
+        }
+    }
+
+    pub fn nodelay(self, nodelay: bool) -> Self {
+        Self {
+            nodelay,
             ..self
         }
     }
@@ -42,6 +51,7 @@ impl<T, E, G> StageBuilder<T, E, G> {
             update: self.update,
             draw: self.draw,
             clear_on_resize: self.clear_on_resize,
+            nodelay: self.nodelay,
         }
     }
 }
@@ -49,6 +59,7 @@ impl<T, E, G> StageBuilder<T, E, G> {
 pub struct Stage<T, E, G> {
     state: T,
     clear_on_resize: bool,
+    pub(crate) nodelay: bool,
     update: UpdateFn<T, E, G>,
     draw: DrawFn<T, E, G>,
 }

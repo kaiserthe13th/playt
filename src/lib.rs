@@ -9,10 +9,13 @@ pub mod color;
 pub mod ext;
 pub mod game;
 pub mod stage;
+pub mod widgets;
 
 pub mod prelude {
     use crate::{ext, game, stage};
 
+    pub use crate::widgets::Area;
+    pub use crate::widgets;
     pub use crate::color;
     pub use ext::*;
     pub use game::Game;

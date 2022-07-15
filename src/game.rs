@@ -10,6 +10,7 @@ pub struct Game<G> {
     globals: G,
     running: bool,
     win: Window,
+    nodelay: bool,
 }
 
 impl<G> Drop for Game<G> {
@@ -25,6 +26,7 @@ impl<G> Game<G> {
         Self {
             globals: initial_globals,
             running: true,
+            nodelay: true,
             win,
         }
     }
@@ -42,8 +44,15 @@ impl<G> Game<G> {
         Some(Self {
             globals: initial_globals,
             running: true,
+            nodelay: true,
             win,
         })
+    }
+
+    #[inline]
+    pub fn nodelay(&mut self, nodelay: bool) {
+        self.nodelay = nodelay;
+        self.win.nodelay(self.nodelay);
     }
 
     fn init() -> Window {
@@ -92,6 +101,10 @@ impl<G> Game<G> {
 
     /// Performs(draws and updates) a [`Stage`](crate::stage::Stage)
     pub fn perform<T, E>(&mut self, stage: &mut Stage<T, E, G>) -> Result<(), E> {
+        if stage.nodelay != self.nodelay {
+            self.nodelay = stage.nodelay;
+            self.win.nodelay(self.nodelay);
+        }
         stage.draw(self)?;
         stage.update(self)?;
         Ok(())
