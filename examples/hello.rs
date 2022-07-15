@@ -1,12 +1,14 @@
+use std::convert::Infallible;
+
 use pancurses::Input;
 use playt::prelude::*;
 
-fn main() {
+fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut game = Game::with_colors(()).expect("couldn't initialize with colors");
 
     let mut stage = Stage::new(())
         .clear_on_resize(true)
-        .draw(|_, _, win| -> Result<(), ()> {
+        .draw(|_, _, win| -> Result<(), Infallible> {
             win.with_attr(color::GREEN_ON_BLACK, |win| {
                 let greeting = "Hello, World!";
                 win.mvprintw(
@@ -26,6 +28,7 @@ fn main() {
         .build();
 
     while game.is_running() {
-        game.perform(&mut stage).unwrap();
+        game.perform(&mut stage)?;
     }
+    Ok(())
 }
