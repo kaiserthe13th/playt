@@ -1,0 +1,17 @@
+[package]
+name = "playt"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+name = "playt"
+crate-type = ["lib"]
+
+[dependencies]
+pancurses = "0.17"
+
+[features]
+default = ["wide"]
+wide = ["pancurses/wide"]
