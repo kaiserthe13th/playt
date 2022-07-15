@@ -3,7 +3,7 @@
 use pancurses::{init_pair, ColorPair};
 
 /// Initializes every [`ColorPair`](pancurses::ColorPair) in this module.
-/// 
+///
 /// <p style="background:rgba(255,181,77,0.16);padding:0.75em;">
 /// <strong>Warning:</strong> But you don't have to call it yourself if you use <a href="file:///home/k13/code/rs/playt/target/doc/playt/game/struct.Game.html#method.with_colors"><code>Game::with_colors</code></a>
 /// </p>

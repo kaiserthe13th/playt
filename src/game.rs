@@ -1,6 +1,6 @@
 //! Contains the [`Game`](crate::game::Game) struct
 
-use pancurses::{Window, initscr, endwin, cbreak, noecho, curs_set, has_colors, start_color};
+use pancurses::{cbreak, curs_set, endwin, has_colors, initscr, noecho, start_color, Window};
 
 use crate::{color, prelude::Stage};
 
@@ -25,10 +25,10 @@ impl<G> Game<G> {
         Self {
             globals: initial_globals,
             running: true,
-            win
+            win,
         }
     }
-    
+
     /// Initialize a new [`Game`](Self) with its initial data
     /// and try to add colors to the [`Game`](Self). If not successfull return [`None`].
     pub fn with_colors(initial_globals: G) -> Option<Self> {
@@ -42,7 +42,7 @@ impl<G> Game<G> {
         Some(Self {
             globals: initial_globals,
             running: true,
-            win
+            win,
         })
     }
 
@@ -95,5 +95,5 @@ impl<G> Game<G> {
         stage.draw(self)?;
         stage.update(self)?;
         Ok(())
-    } 
+    }
 }

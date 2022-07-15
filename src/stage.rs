@@ -1,5 +1,5 @@
 //! Contains the [`Stage`](crate::stage::Stage) struct
-use pancurses::{Window, Input};
+use pancurses::{Input, Window};
 
 use crate::game::Game;
 
@@ -31,23 +31,17 @@ impl<T, E, G> StageBuilder<T, E, G> {
     }
 
     pub fn update(self, f: UpdateFn<T, E, G>) -> Self {
-        Self {
-            update: f,
-            ..self
-        }
+        Self { update: f, ..self }
     }
     pub fn draw(self, f: DrawFn<T, E, G>) -> Self {
-        Self {
-            draw: f,
-            ..self
-        }
+        Self { draw: f, ..self }
     }
     pub fn build(self) -> Stage<T, E, G> {
         Stage {
             state: self.state,
             update: self.update,
             draw: self.draw,
-            clear_on_resize: self.clear_on_resize
+            clear_on_resize: self.clear_on_resize,
         }
     }
 }

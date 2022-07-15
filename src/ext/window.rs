@@ -1,5 +1,5 @@
-use pancurses::Window;
 use pancurses::chtype;
+use pancurses::Window;
 
 /// Extensions over [`Window`](pancurses::Window)
 pub trait WindowExt {
@@ -28,7 +28,7 @@ impl WindowExt for Window {
         (self.get_mid_y(y), self.get_mid_x(x))
     }
     fn with_attr<T: Into<chtype>>(&self, attrs: T, f: fn(&Window)) {
-        let i = attrs.into(); 
+        let i = attrs.into();
         self.attron(i);
         f(self);
         self.attroff(i);
