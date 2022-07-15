@@ -8,12 +8,6 @@ use std::thread;
 use pancurses::Input;
 use playt::{prelude::*, widgets::ScrollingText};
 
-struct Example<T> {
-    st: Arc<Mutex<ScrollingText>>,
-    running: Arc<AtomicBool>,
-    t: thread::JoinHandle<T>,
-}
-
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut game = Game::with_colors(()).expect("couldn't initialize with colors");
 
@@ -21,39 +15,39 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let stt = Arc::clone(&st);
     let running = Arc::new(AtomicBool::new(true));
     let runningt = Arc::clone(&running);
+    
+    thread::spawn(move || {
+        while runningt.load(atomic::Ordering::Relaxed) {
+            thread::sleep(Duration::from_secs(1));
+            stt.lock().expect("couldn't obtain lock").scroll();
+        }
+    });
 
-    let mut stage = Stage::new(Example {
-        st,
-        running,
-        t: thread::spawn(move || {
-            while runningt.load(atomic::Ordering::Relaxed) {
-                thread::sleep(Duration::from_secs(1));
-                stt.lock().expect("couldn't obtain lock").scroll();
-            }
-        })
-    })
+    let mut stage = Stage::new(st)
         .clear_on_resize(true)
         .nodelay(true)
-        .draw(|_, s, win| -> Result<(), Infallible> {
-            let mut stl = s.st.lock().expect("couldn't obtain lock");
+        .draw(move |_, s, win| -> Result<(), Infallible> {
+            let mut stl = s.lock().expect("couldn't obtain lock");
             stl.pos = win.get_mid_yx(stl.area_i32());
+            win.attron(color::MAGENTA_ON_BLACK);
             stl.draw(win);
+            win.attroff(color::MAGENTA_ON_BLACK);
             
             let s = "[Left] Move Left | [Right] Move Right | [Q] Quit";
             win.mvprintw(win.get_max_y() - 1, win.get_mid_x(s.len() as i32), s);
             Ok(())
         })
-        .update(|game, s, inp| {
+        .update(move |game, st, inp| {
             match inp {
                 Some(Input::Character('q')) => {
-                    s.running.store(false, atomic::Ordering::Relaxed);
+                    running.store(false, atomic::Ordering::Relaxed);
                     game.stop();
                 },
                 Some(Input::KeyLeft) => {
-                    s.st.lock().expect("couldn't obtain lock").scroll_left();
+                    st.lock().expect("couldn't obtain lock").scroll_left();
                 },
                 Some(Input::KeyRight) => {
-                    s.st.lock().expect("couldn't obtain lock").scroll();
+                    st.lock().expect("couldn't obtain lock").scroll();
                 }
                 _ => (),
             }
@@ -64,6 +58,5 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     while game.is_running() {
         game.perform(&mut stage)?;
     }
-    stage.state_consume().t.join().expect("unable to join thread");
     Ok(())
 }
