@@ -2,6 +2,8 @@
 
 read like plate, playt with fun
 
+## Hello, World!
+
 ```rs
 // in examples/hello.rs
 
