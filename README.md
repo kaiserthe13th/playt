@@ -10,7 +10,7 @@ read like plate, playt with fun
 use pancurses::Input;
 use playt::prelude::*;
 
-fn main() -> Result<(), Box<dyn std::error::Error>> {
+fn main() {
     let mut game = Game::with_colors(())
         .expect("couldn't initialize with colors");
     
@@ -34,7 +34,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     while game.is_running() {
         game.perform(&mut stage).unwrap();
     }
-    Ok(())
 }
 ```
 
